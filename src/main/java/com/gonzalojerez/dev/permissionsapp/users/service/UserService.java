@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,13 +30,44 @@ public class UserService {
     RoleService roleService;
 
     public User create(CreateUserDto createUserDto){
+
+        if(createUserDto.getPassword() == null && createUserDto.getAuthTypes().isBlank()){
+            throw new RuntimeException("Se necesita una contraseña o un tipo de autenticación oauth");
+        }
+
         User newUser = User.builder()
-                .email(createUserDto.getEmail())
-                .name(createUserDto.getName())
-                .password(passwordEncoder.encode(createUserDto.getPassword()))
                 .permissions(Permissions.UPDATE_HIMSELF.name())
                 .build();
+
+        if(createUserDto.getName() != null){
+            newUser.setName(createUserDto.getName());
+        }
+
+        if(createUserDto.getUsername() != null){
+            newUser.setUsername(createUserDto.getUsername());
+        }
+
+        if(createUserDto.getEmail() != null){
+            newUser.setEmail(createUserDto.getEmail());
+        }
+
+        if(createUserDto.getPassword() != null){
+            newUser.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
+        }
+
+        if(createUserDto.getAuthTypes() != null){
+            newUser.setAuthTypes(createUserDto.getAuthTypes());
+        }
+
         return userRepository.save(newUser);
+    }
+
+    public Optional<User> findOneByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
+    public Optional<User> findOneByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 
     public User update(String id, UpdateUserDto updateUserDto, Authentication auth){

@@ -1,8 +1,6 @@
 package com.gonzalojerez.dev.permissionsapp.security;
 
-import com.gonzalojerez.dev.permissionsapp.security.filters.JwtAuthenticationFilter;
 import com.gonzalojerez.dev.permissionsapp.security.filters.JwtAuthorizationFilter;
-import com.gonzalojerez.dev.permissionsapp.security.jwt.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,18 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager, JwtUtils jwtUtils, JwtAuthorizationFilter jwtAuthorizationFilter) throws Exception {
-
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
-        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
+    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthorizationFilter jwtAuthorizationFilter) throws Exception {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> {
-//                    auth.anyRequest().authenticated();
-//                })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

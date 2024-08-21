@@ -11,14 +11,18 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class CreateUserDto {
 
-    @NotEmpty
+//    @NotEmpty
     private String name;
 
-    @NotEmpty
-    @Email
+//    @NotEmpty
+//    @Email
     private String email;
 
-    @NotEmpty
-    @Length(min = 6)
+    private String username;
+
+//    @NotEmpty
+//    @Length(min = 6)
     private String password;
+
+    private String authTypes;
 }

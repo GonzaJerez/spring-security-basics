@@ -16,3 +16,10 @@ spring:
 
 jwt:
   secret: hola-mundo@primera_app_springBOOT
+
+oauth:
+  github:
+    client_id: ${GITHUB_CLIENT_ID}
+    secret: ${GITHUB_SECRET}
+  google:
+    client_id: ${GOOGLE_CLIENT_ID}

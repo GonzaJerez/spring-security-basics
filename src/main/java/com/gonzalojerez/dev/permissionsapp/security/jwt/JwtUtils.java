@@ -12,7 +12,6 @@ public class JwtUtils {
     String jwtSecret;
 
     public String generateToken(String principal) {
-        System.out.println("jwtSecret = " + jwtSecret);
         return Jwts
                 .builder()
                 .claim("email", principal)
